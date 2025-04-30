@@ -31,6 +31,7 @@
             pboxUserPhoto = new PictureBox();
             lblUsername = new Label();
             btnLogOut = new Button();
+            recentlyPlayedPanel = new FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)pboxUserPhoto).BeginInit();
             SuspendLayout();
             // 
@@ -63,12 +64,24 @@
             btnLogOut.UseVisualStyleBackColor = true;
             btnLogOut.Click += btnLogOut_Click;
             // 
+            // recentlyPlayedPanel
+            // 
+            recentlyPlayedPanel.AutoScroll = true;
+            recentlyPlayedPanel.BorderStyle = BorderStyle.FixedSingle;
+            recentlyPlayedPanel.FlowDirection = FlowDirection.TopDown;
+            recentlyPlayedPanel.Location = new Point(345, 73);
+            recentlyPlayedPanel.Name = "recentlyPlayedPanel";
+            recentlyPlayedPanel.Size = new Size(531, 525);
+            recentlyPlayedPanel.TabIndex = 3;
+            recentlyPlayedPanel.WrapContents = false;
+            // 
             // MainMenu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(1055, 683);
+            Controls.Add(recentlyPlayedPanel);
             Controls.Add(btnLogOut);
             Controls.Add(lblUsername);
             Controls.Add(pboxUserPhoto);
@@ -84,5 +97,6 @@
         private PictureBox pboxUserPhoto;
         private Label lblUsername;
         private Button btnLogOut;
+        private FlowLayoutPanel recentlyPlayedPanel;
     }
 }

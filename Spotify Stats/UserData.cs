@@ -6,6 +6,9 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Drawing;
+using System.IO;
+
 
 namespace Spotify_Stats
 {
@@ -73,7 +76,7 @@ namespace Spotify_Stats
         }
 
 
-        public async Task<Image> DownloadProfileImage(string imageUrl)
+        public async Task<System.Drawing.Image> DownloadProfileImage(string imageUrl)
         {
             if (string.IsNullOrEmpty(imageUrl))
                 return null;
@@ -87,7 +90,7 @@ namespace Spotify_Stats
                     byte[] imageData = await response.Content.ReadAsByteArrayAsync();
                     using (MemoryStream ms = new MemoryStream(imageData))
                     {
-                        return Image.FromStream(ms);
+                        return System.Drawing.Image.FromStream(ms);
                     }
                 }
 

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,12 +25,15 @@ namespace Spotify_Stats
             var settings = Properties.Settings.Default;
             string accessToken = settings.AccessToken;
 
+            LoadRecentlyPlayedTracks();
             SetupUserProfileUI(accessToken);
 
         }
 
         UserData ud = new UserData();
         System.Drawing.Image profileImage;
+        //create an instance for the UserLast10Songs class
+        UserLast10Songs userLast10Songs = new UserLast10Songs();
 
 
 
@@ -143,5 +147,95 @@ namespace Spotify_Stats
             
             Application.Exit();
         }
+
+
+
+        private async Task LoadRecentlyPlayedTracks()
+        {
+            try
+            {
+                recentlyPlayedPanel.Controls.Clear();
+
+                var tracks = await userLast10Songs.GetRecentlyPlayedTracks(10);
+
+                foreach (var track in tracks)
+                {
+                    var trackPanel = new Panel
+                    {
+                        Width = recentlyPlayedPanel.Width - 25,
+                        Height = 80,
+                        Margin = new Padding(5),
+                        BorderStyle = BorderStyle.FixedSingle
+                    };
+
+                    // Imagen del álbum
+                    var albumPicture = new PictureBox
+                    {
+                        Width = 70,
+                        Height = 70,
+                        Left = 5,
+                        Top = 5,
+                        SizeMode = PictureBoxSizeMode.StretchImage
+                    };
+
+                    if (!string.IsNullOrEmpty(track.AlbumImageUrl))
+                    {
+                        using (var webClient = new WebClient())
+                        {
+                            var imageData = webClient.DownloadData(track.AlbumImageUrl);
+                            using (var stream = new MemoryStream(imageData))
+                            {
+                                albumPicture.Image = System.Drawing.Image.FromStream(stream);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //albumPicture.Image = Properties.Resources.DefaultAlbumImage;
+                    }
+
+                    // Información de la canción
+                    var trackLabel = new Label
+                    {
+                        Text = track.TrackName,
+                        Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                        Left = 80,
+                        Top = 10,
+                        AutoSize = true
+                    };
+
+                    var artistLabel = new Label
+                    {
+                        Text = track.Artists,
+                        Font = new Font("Segoe UI", 9),
+                        Left = 80,
+                        Top = 30,
+                        AutoSize = true
+                    };
+
+                    var timeLabel = new Label
+                    {
+                        Text = track.PlayedAtRelative,
+                        Font = new Font("Segoe UI", 8),
+                        Left = 80,
+                        Top = 50,
+                        AutoSize = true
+                    };
+
+                    trackPanel.Controls.Add(albumPicture);
+                    trackPanel.Controls.Add(trackLabel);
+                    trackPanel.Controls.Add(artistLabel);
+                    trackPanel.Controls.Add(timeLabel);
+
+                    recentlyPlayedPanel.Controls.Add(trackPanel);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar historial: {ex.Message}");
+            }
+        }
+
+
     }
 }
