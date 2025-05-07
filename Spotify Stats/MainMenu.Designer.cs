@@ -31,7 +31,8 @@
             pboxUserPhoto = new PictureBox();
             lblUsername = new Label();
             btnLogOut = new Button();
-            recentlyPlayedPanel = new FlowLayoutPanel();
+            MainFlowPanel = new FlowLayoutPanel();
+            btnPlaylists = new Button();
             ((System.ComponentModel.ISupportInitialize)pboxUserPhoto).BeginInit();
             SuspendLayout();
             // 
@@ -64,16 +65,26 @@
             btnLogOut.UseVisualStyleBackColor = true;
             btnLogOut.Click += btnLogOut_Click;
             // 
-            // recentlyPlayedPanel
+            // MainFlowPanel
             // 
-            recentlyPlayedPanel.AutoScroll = true;
-            recentlyPlayedPanel.BorderStyle = BorderStyle.FixedSingle;
-            recentlyPlayedPanel.FlowDirection = FlowDirection.TopDown;
-            recentlyPlayedPanel.Location = new Point(345, 73);
-            recentlyPlayedPanel.Name = "recentlyPlayedPanel";
-            recentlyPlayedPanel.Size = new Size(531, 525);
-            recentlyPlayedPanel.TabIndex = 3;
-            recentlyPlayedPanel.WrapContents = false;
+            MainFlowPanel.AutoScroll = true;
+            MainFlowPanel.BorderStyle = BorderStyle.FixedSingle;
+            MainFlowPanel.FlowDirection = FlowDirection.TopDown;
+            MainFlowPanel.Location = new Point(412, 62);
+            MainFlowPanel.Name = "MainFlowPanel";
+            MainFlowPanel.Size = new Size(604, 564);
+            MainFlowPanel.TabIndex = 3;
+            MainFlowPanel.WrapContents = false;
+            // 
+            // btnPlaylists
+            // 
+            btnPlaylists.Location = new Point(74, 324);
+            btnPlaylists.Name = "btnPlaylists";
+            btnPlaylists.Size = new Size(147, 23);
+            btnPlaylists.TabIndex = 4;
+            btnPlaylists.Text = "See Playlists";
+            btnPlaylists.UseVisualStyleBackColor = true;
+            btnPlaylists.Click += btnPlaylists_Click;
             // 
             // MainMenu
             // 
@@ -81,10 +92,11 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(1055, 683);
-            Controls.Add(recentlyPlayedPanel);
+            Controls.Add(btnPlaylists);
             Controls.Add(btnLogOut);
             Controls.Add(lblUsername);
             Controls.Add(pboxUserPhoto);
+            Controls.Add(MainFlowPanel);
             Name = "MainMenu";
             FormClosed += MainMenu_FormClosed;
             ((System.ComponentModel.ISupportInitialize)pboxUserPhoto).EndInit();
@@ -97,6 +109,7 @@
         private PictureBox pboxUserPhoto;
         private Label lblUsername;
         private Button btnLogOut;
-        private FlowLayoutPanel recentlyPlayedPanel;
+        private FlowLayoutPanel MainFlowPanel;
+        private Button btnPlaylists;
     }
 }

@@ -90,6 +90,10 @@ namespace Spotify_Stats
                     byte[] imageData = await response.Content.ReadAsByteArrayAsync();
                     using (MemoryStream ms = new MemoryStream(imageData))
                     {
+                        //save image to disk
+
+
+
                         return System.Drawing.Image.FromStream(ms);
                     }
                 }

@@ -9,7 +9,19 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="TokenExpiration" Type="System.DateTime" Scope="User">
-      <Value Profile="(Default)">2025-04-28</Value>
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="User" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UserImageBase64" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="PlaylistName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="PlaylistImageBase64" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

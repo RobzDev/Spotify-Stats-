@@ -49,13 +49,60 @@ namespace Spotify_Stats.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2025-04-28")]
         public global::System.DateTime TokenExpiration {
             get {
                 return ((global::System.DateTime)(this["TokenExpiration"]));
             }
             set {
                 this["TokenExpiration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string User {
+            get {
+                return ((string)(this["User"]));
+            }
+            set {
+                this["User"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string UserImageBase64 {
+            get {
+                return ((string)(this["UserImageBase64"]));
+            }
+            set {
+                this["UserImageBase64"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PlaylistName {
+            get {
+                return ((string)(this["PlaylistName"]));
+            }
+            set {
+                this["PlaylistName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PlaylistImageBase64 {
+            get {
+                return ((string)(this["PlaylistImageBase64"]));
+            }
+            set {
+                this["PlaylistImageBase64"] = value;
             }
         }
     }

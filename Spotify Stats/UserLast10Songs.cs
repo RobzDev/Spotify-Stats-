@@ -40,7 +40,7 @@ namespace Spotify_Stats
                 Artists = string.Join(", ", item.Track.Artists.Select(a => a.Name)),
                 AlbumName = item.Track.Album.Name,
                 AlbumImageUrl = item.Track.Album.Images.FirstOrDefault()?.Url,
-                PlayedAt = item.PlayedAt,
+                PlayedAt = item.PlayedAt.ToLocalTime(),
                 Duration = TimeSpan.FromMilliseconds(item.Track.DurationMs)
             }).ToList();
         }
