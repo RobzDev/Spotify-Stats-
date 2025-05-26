@@ -10,8 +10,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="100k_Dataset.csv" />
+    <None Remove="client_secret_640831598442-pup9eq5f4de7mj8n198665m04i313an4.apps.googleusercontent.com.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="100k_Dataset.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="client_secret_640831598442-pup9eq5f4de7mj8n198665m04i313an4.apps.googleusercontent.com.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.Gmail.v1" Version="1.69.0.3742" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="ScottPlot" Version="5.0.55" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.55" />
   </ItemGroup>
 
   <ItemGroup>

@@ -15,7 +15,7 @@ namespace Spotify_Stats
     {
         
         
-        public async Task<List<RecentlyPlayedItem>> GetRecentlyPlayedTracks(int limit = 10)
+        public async Task<List<RecentlyPlayedItem>> GetRecentlyPlayedTracks(int limit = 20)
         {
             HttpClient client = new HttpClient();
 

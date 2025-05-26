@@ -104,6 +104,8 @@ namespace Spotify_Stats
 
         private void btnLogOut_Click(object sender, EventArgs e)
         {
+
+
             Logout();
 
 
@@ -126,7 +128,7 @@ namespace Spotify_Stats
             {
                 MainFlowPanel.Controls.Clear();
 
-                var tracks = await userLast10Songs.GetRecentlyPlayedTracks(10);
+                var tracks = await userLast10Songs.GetRecentlyPlayedTracks(20);
 
                 foreach (var track in tracks)
                 {
@@ -208,7 +210,9 @@ namespace Spotify_Stats
 
         private async void btnPlaylists_Click(object sender, EventArgs e)
         {
-
+            //make the button blue when clicked and unnaccessable the button
+           
+            btnPlaylists.Visible = false;
             LoadPlaylistsAsync();
 
 

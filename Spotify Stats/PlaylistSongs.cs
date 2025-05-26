@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Xml.Serialization;
 
 namespace Spotify_Stats
 {
@@ -139,11 +139,16 @@ namespace Spotify_Stats
         public string Id { get; set; }
     }
 
+
+    [XmlRoot("PlaylistTrackItem")]
     public class PlaylistTrackItem
     {
         public string Id { get; set; }
         public string Name { get; set; }
         public long DurationMs { get; set; }
+
+        [XmlArray("Artists")]
+        [XmlArrayItem("Artist")]
         public List<string> Artists { get; set; }
         public string AlbumName { get; set; }
         public string AlbumImageUrl { get; set; }
