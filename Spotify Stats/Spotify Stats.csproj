@@ -18,9 +18,6 @@
     <Content Include="100k_Dataset.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="client_secret_640831598442-pup9eq5f4de7mj8n198665m04i313an4.apps.googleusercontent.com.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>

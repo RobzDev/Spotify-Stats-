@@ -49,6 +49,7 @@
             btnPrevious = new Button();
             btnSeeTop100k = new Button();
             dgvtop100k = new DataGridView();
+            btnDatabase = new Button();
             ((System.ComponentModel.ISupportInitialize)pboxUserPhoto).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbPlaylistImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtvPlaylistSongs).BeginInit();
@@ -205,7 +206,6 @@
             rdbtnSendGmail.TabIndex = 17;
             rdbtnSendGmail.Text = "Send Gmail";
             rdbtnSendGmail.UseVisualStyleBackColor = true;
-           
             // 
             // btnCompareData
             // 
@@ -247,12 +247,22 @@
             dgvtop100k.TabIndex = 21;
             dgvtop100k.Visible = false;
             // 
+            // btnDatabase
+            // 
+            btnDatabase.Location = new Point(599, 121);
+            btnDatabase.Name = "btnDatabase";
+            btnDatabase.Size = new Size(123, 23);
+            btnDatabase.TabIndex = 22;
+            btnDatabase.Text = "Conect to Data Base";
+            btnDatabase.UseVisualStyleBackColor = true;
+            // 
             // PlaylistForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(1531, 927);
+            Controls.Add(btnDatabase);
             Controls.Add(btnSeeTop100k);
             Controls.Add(btnPrevious);
             Controls.Add(btnCompareData);
@@ -305,5 +315,6 @@
         private Button btnPrevious;
         private Button btnSeeTop100k;
         private DataGridView dgvtop100k;
+        private Button btnDatabase;
     }
 }

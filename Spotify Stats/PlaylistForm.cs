@@ -23,7 +23,9 @@ namespace Spotify_Stats
         Dictionary<string, int> artistCount = new Dictionary<string, int>();
 
 
-        List<PlaylistTrackDisplayItem> songs = new List<PlaylistTrackDisplayItem>();
+        List<PlaylistTrackDisplayItem> songs;
+        List<PlaylistTrackDisplayItem> OriginalSongs;
+     
 
         private SortableBindingList<PlaylistTrackDisplayItem> filteredTracksList;
         SortableBindingList<PlaylistTrackDisplayItem> top100kSongs;
@@ -67,7 +69,7 @@ namespace Spotify_Stats
             var playlistsongs = new PlaylistSongs(id);
             var songsRaw = await playlistsongs.GetPlaylistTracks();
 
-            var displayList = songsRaw.Select(song => new PlaylistTrackDisplayItem
+             var displayList = songsRaw.Select(song => new PlaylistTrackDisplayItem
             {
                 Name = song.Name,
                 Album = song.AlbumName,
@@ -78,9 +80,11 @@ namespace Spotify_Stats
                 OriginalTrack = song
             }).ToList();
 
+      
 
+            songs = new List<PlaylistTrackDisplayItem>(displayList);
 
-            songs = displayList;
+            OriginalSongs = new List<PlaylistTrackDisplayItem>(displayList); // Store the original songs for comparison later
 
             //obtain every artist id and name from the songs and store them in the dictionary
             foreach (var song in songs)
@@ -216,6 +220,8 @@ namespace Spotify_Stats
                            .Where(term => term.Length >= 2)
                            .All(term => searchContent.Contains(term));
                 }).ToList();
+
+
 
             filteredTracksList = new SortableBindingList<PlaylistTrackDisplayItem>(filteredSongs);
             dtvPlaylistSongs.DataSource = filteredTracksList;
@@ -608,9 +614,9 @@ namespace Spotify_Stats
             }
 
 
-            var songs = new List<PlaylistTrackDisplayItem>();
-            top100kSongs = new SortableBindingList<PlaylistTrackDisplayItem>(songs);
-
+            var s = new List<PlaylistTrackDisplayItem>();
+            top100kSongs = new SortableBindingList<PlaylistTrackDisplayItem>(s);
+            songs.Clear();
             foreach (var track in filteredTracksList)
             {
                 string trackName = track.Name.Trim().ToLower();
@@ -632,6 +638,7 @@ namespace Spotify_Stats
                 if (match)
                 {
                     top100kSongs.Add(track);
+                    songs.Add(track); 
                 }
             }
 
@@ -662,15 +669,31 @@ namespace Spotify_Stats
                 btnChangeGraph.Enabled = true;
                 rdbtnSendGmail.Enabled = true;
                 cbExport.Enabled = true;
+                txtboxSearch.Enabled = true;
             }
 
+           
 
-            SortableBindingList<PlaylistTrackDisplayItem> comparer = new SortableBindingList<PlaylistTrackDisplayItem>(songs);
-            if (filteredTracksList == comparer)
+            
+            if (songs == OriginalSongs)
             {
                 return;
             }
-            filteredTracksList = comparer;
+
+        
+
+
+
+            songs = OriginalSongs.Select(item => new PlaylistTrackDisplayItem
+            {
+                Name = item.Name,
+                Album = item.Album,
+                Duration = item.Duration,
+                Artists = item.Artists,
+                AddedAt = item.AddedAt,
+                OriginalTrack = item.OriginalTrack
+            }).ToList();
+            filteredTracksList = new SortableBindingList<PlaylistTrackDisplayItem>(songs);
             dtvPlaylistSongs.DataSource = null;
             dtvPlaylistSongs.DataSource = filteredTracksList;
         }
