@@ -1,4 +1,5 @@
-﻿using ScottPlot;
+﻿using Microsoft.Data.SqlClient;
+using ScottPlot;
 using ScottPlot.Plottables;
 using System;
 using System.Collections;
@@ -25,11 +26,11 @@ namespace Spotify_Stats
 
         List<PlaylistTrackDisplayItem> songs;
         List<PlaylistTrackDisplayItem> OriginalSongs;
-     
+        string playlistname = "";
 
         private SortableBindingList<PlaylistTrackDisplayItem> filteredTracksList;
         SortableBindingList<PlaylistTrackDisplayItem> top100kSongs;
-
+        bool btnDatabase_Clicked = false;
 
 
 
@@ -46,13 +47,24 @@ namespace Spotify_Stats
 
 
 
+            playlistname = name;
 
-            lblPlaylistName.Text = name;
+            lblPlaylistName.Text = playlistname;
 
 
             pboxUserPhoto.Image = b64.Base64ToImage(Properties.Settings.Default.UserImageBase64);
             b64.SetCircularProfilePicture(pboxUserPhoto, pboxUserPhoto.Image);
             lblUsername.Text = Properties.Settings.Default.User;
+
+
+            string normalizedPlaylistName = playlistname.ToLower().Replace(" ", "_").Replace("-", "_");
+
+            bool exists = GetAllTableNames()
+                .Select(name => name.ToLower().Replace(" ", "_"))
+                .Contains(normalizedPlaylistName);
+
+            btnCreateTable.Enabled = !exists;
+
 
         }
 
@@ -69,7 +81,7 @@ namespace Spotify_Stats
             var playlistsongs = new PlaylistSongs(id);
             var songsRaw = await playlistsongs.GetPlaylistTracks();
 
-             var displayList = songsRaw.Select(song => new PlaylistTrackDisplayItem
+            var displayList = songsRaw.Select(song => new PlaylistTrackDisplayItem
             {
                 Name = song.Name,
                 Album = song.AlbumName,
@@ -80,7 +92,7 @@ namespace Spotify_Stats
                 OriginalTrack = song
             }).ToList();
 
-      
+
 
             songs = new List<PlaylistTrackDisplayItem>(displayList);
 
@@ -284,7 +296,7 @@ namespace Spotify_Stats
                 if (column.SortMode != DataGridViewColumnSortMode.NotSortable)
                 {
                     // Toggle the sort direction
-                    ListSortDirection direction = column.HeaderCell.SortGlyphDirection == SortOrder.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+                    ListSortDirection direction = column.HeaderCell.SortGlyphDirection == System.Windows.Forms.SortOrder.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
                     dtvPlaylistSongs.Sort(column, direction);
                 }
             }
@@ -370,7 +382,7 @@ namespace Spotify_Stats
             {
                 MessageBox.Show($"Export successful:\n{filePath}", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                
+
 
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(filePath) { UseShellExecute = true });
 
@@ -638,7 +650,7 @@ namespace Spotify_Stats
                 if (match)
                 {
                     top100kSongs.Add(track);
-                    songs.Add(track); 
+                    songs.Add(track);
                 }
             }
 
@@ -672,15 +684,15 @@ namespace Spotify_Stats
                 txtboxSearch.Enabled = true;
             }
 
-           
 
-            
+
+
             if (songs == OriginalSongs)
             {
                 return;
             }
 
-        
+
 
 
 
@@ -701,9 +713,9 @@ namespace Spotify_Stats
         private void btnSeeTop100k_Click(object sender, EventArgs e)
         {
 
-           if (dgvtop100k.Visible == true)
+            if (dgvtop100k.Visible == true)
             {
-               
+
                 return;
             }
 
@@ -711,8 +723,8 @@ namespace Spotify_Stats
             dtvPlaylistSongs.Visible = false;
 
             CargarDatasetTop100k();
-            
-           dgvtop100k.Visible = true;
+
+            dgvtop100k.Visible = true;
             //unnable the search bar and the export options
             txtboxSearch.Enabled = false;
             cbExport.Enabled = false;
@@ -769,5 +781,210 @@ namespace Spotify_Stats
             dgvtop100k.DataSource = topList;
         }
 
+        private void btnDatabase_Click(object sender, EventArgs e)
+        {
+
+            if (btnDatabase_Clicked == false)
+            {
+                btnDatabase_Clicked = true;
+                panelDatabase.Visible = true;
+
+                dgvtop100k.Visible = false;
+                btnViewOption.Enabled = false;
+                btnCompareData.Enabled = false;
+                btnSeeTop100k.Enabled = false;
+                btnPrevious.Enabled = false;
+            }
+            else if (btnDatabase_Clicked == true)
+            {
+                btnDatabase_Clicked = false;
+                panelDatabase.Visible = false;
+
+                btnViewOption.Enabled = true;
+                btnCompareData.Enabled = true;
+                btnSeeTop100k.Enabled = true;
+                btnPrevious.Enabled = true;
+
+
+
+            }
+        }
+
+        private void btnCreateTable_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(playlistname))
+            {
+                MessageBox.Show("El nombre de la playlist no puede estar vacío.");
+                return;
+            }
+
+            // Reemplaza caracteres inválidos si es necesario
+            string tableName = playlistname.Replace(" ", "_").Replace("-", "_");
+
+            string connectionString = @"Server=localhost\SQLEXPRESS;Database=spotifyproject;Trusted_Connection=True;Encrypt=False;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    // Verifica si la tabla ya existe
+                    string checkTableQuery = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = @TableName";
+                    using (SqlCommand checkCmd = new SqlCommand(checkTableQuery, connection))
+                    {
+                        checkCmd.Parameters.AddWithValue("@TableName", tableName);
+                        int tableCount = (int)checkCmd.ExecuteScalar();
+
+                        if (tableCount > 0)
+                        {
+                            MessageBox.Show("That data already exists in the Data Base.");
+                            return;
+                        }
+                    }
+
+                    // Crea la tabla
+                    string createTableQuery = $@"
+                CREATE TABLE [{tableName}] (
+                    Name NVARCHAR(255),
+                    Album NVARCHAR(255),
+                    Duration NVARCHAR(10),
+                    Artists NVARCHAR(255),
+                    AddedAt NVARCHAR(50),
+                    AddedBy NVARCHAR(255)
+                )";
+
+                    using (SqlCommand createCmd = new SqlCommand(createTableQuery, connection))
+                    {
+                        createCmd.ExecuteNonQuery();
+                    }
+
+                    // Inserta datos de la playlist
+                    foreach (var song in OriginalSongs)
+                    {
+                        string insertQuery = $@"
+                    INSERT INTO [{tableName}] (Name, Album, Duration, Artists, AddedAt, AddedBy)
+                    VALUES (@Name, @Album, @Duration, @Artists, @AddedAt, @AddedBy)";
+
+                        using (SqlCommand insertCmd = new SqlCommand(insertQuery, connection))
+                        {
+                            insertCmd.Parameters.AddWithValue("@Name", song.Name ?? "");
+                            insertCmd.Parameters.AddWithValue("@Album", song.Album ?? "");
+                            insertCmd.Parameters.AddWithValue("@Duration", song.Duration ?? "");
+                            insertCmd.Parameters.AddWithValue("@Artists", song.Artists ?? "");
+                            insertCmd.Parameters.AddWithValue("@AddedAt", song.AddedAt ?? "");
+                            insertCmd.Parameters.AddWithValue("@AddedBy", song.OriginalTrack?.AddedBy ?? "");
+
+                            insertCmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    MessageBox.Show("Playlist guardada correctamente en la base de datos.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al crear la tabla: " + ex.Message);
+                }
+            }
+        }
+
+
+        private List<string> GetAllTableNames()
+        {
+            List<string> tableNames = new List<string>();
+
+            string connectionString = @"Server=localhost\SQLEXPRESS;Database=spotifyproject;Trusted_Connection=True;Encrypt=False;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    string query = "SELECT name FROM sys.tables";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string rawName = reader.GetString(0);
+                            string displayName = rawName.Replace("_", " ");
+                            tableNames.Add(displayName);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error obtaining the Tables: " + ex.Message);
+                }
+            }
+
+            return tableNames;
+        }
+
+        private void btnBringTable_Click(object sender, EventArgs e)
+        {
+
+
+
+            cbTablesInDataBase.Visible = true;
+
+            cbTablesInDataBase.Items.Clear();
+            List<string> tableNames = GetAllTableNames();
+            foreach (string tableName in tableNames)
+            {
+                cbTablesInDataBase.Items.Add(tableName);
+            }
+
+
+
+        }
+
+        private void cbTablesInDataBase_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            // Get the selected table name and replace spaces with underscores
+            string selectedTable = cbTablesInDataBase.SelectedItem.ToString().Replace(" ", "_").Replace("-", "_");
+            string connectionString = @"Server=localhost\SQLEXPRESS;Database=spotifyproject;Trusted_Connection=True;Encrypt=False;";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    // Query to get data from the selected table
+                    string query = $"SELECT * FROM [{selectedTable}]";
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        List<PlaylistTrackDisplayItem> items = new List<PlaylistTrackDisplayItem>();
+                        while (reader.Read())
+                        {
+                            items.Add(new PlaylistTrackDisplayItem
+                            {
+                                Name = reader["Name"].ToString(),
+                                Album = reader["Album"].ToString(),
+                                Duration = reader["Duration"].ToString(),
+                                Artists = reader["Artists"].ToString(),
+                                AddedAt = reader["AddedAt"].ToString(),
+                                OriginalTrack = new PlaylistTrackItem
+                                {
+                                    AddedBy = reader["AddedBy"].ToString()
+                                }
+                            });
+                        }
+                        filteredTracksList = new SortableBindingList<PlaylistTrackDisplayItem>(items);
+                        dtvPlaylistSongs.DataSource = filteredTracksList;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener los datos de la tabla: " + ex.Message);
+                }
+
+
+
+            }
+        }
     }
 }

@@ -50,10 +50,15 @@
             btnSeeTop100k = new Button();
             dgvtop100k = new DataGridView();
             btnDatabase = new Button();
+            panelDatabase = new Panel();
+            cbTablesInDataBase = new ComboBox();
+            btnBringTable = new Button();
+            btnCreateTable = new Button();
             ((System.ComponentModel.ISupportInitialize)pboxUserPhoto).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbPlaylistImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtvPlaylistSongs).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvtop100k).BeginInit();
+            panelDatabase.SuspendLayout();
             SuspendLayout();
             // 
             // lblUsername
@@ -249,12 +254,54 @@
             // 
             // btnDatabase
             // 
-            btnDatabase.Location = new Point(599, 121);
+            btnDatabase.Location = new Point(553, 192);
             btnDatabase.Name = "btnDatabase";
-            btnDatabase.Size = new Size(123, 23);
+            btnDatabase.Size = new Size(195, 23);
             btnDatabase.TabIndex = 22;
-            btnDatabase.Text = "Conect to Data Base";
+            btnDatabase.Text = "Connect to Data Base";
             btnDatabase.UseVisualStyleBackColor = true;
+            btnDatabase.Click += btnDatabase_Click;
+            // 
+            // panelDatabase
+            // 
+            panelDatabase.Controls.Add(cbTablesInDataBase);
+            panelDatabase.Controls.Add(btnBringTable);
+            panelDatabase.Controls.Add(btnCreateTable);
+            panelDatabase.Location = new Point(548, 86);
+            panelDatabase.Name = "panelDatabase";
+            panelDatabase.Size = new Size(200, 100);
+            panelDatabase.TabIndex = 23;
+            panelDatabase.Visible = false;
+            // 
+            // cbTablesInDataBase
+            // 
+            cbTablesInDataBase.FormattingEnabled = true;
+            cbTablesInDataBase.Location = new Point(42, 26);
+            cbTablesInDataBase.Name = "cbTablesInDataBase";
+            cbTablesInDataBase.Size = new Size(121, 23);
+            cbTablesInDataBase.TabIndex = 2;
+            cbTablesInDataBase.Visible = false;
+            cbTablesInDataBase.SelectedIndexChanged += cbTablesInDataBase_SelectedIndexChanged;
+            // 
+            // btnBringTable
+            // 
+            btnBringTable.Location = new Point(122, 74);
+            btnBringTable.Name = "btnBringTable";
+            btnBringTable.Size = new Size(75, 23);
+            btnBringTable.TabIndex = 1;
+            btnBringTable.Text = "Bring Table";
+            btnBringTable.UseVisualStyleBackColor = true;
+            btnBringTable.Click += btnBringTable_Click;
+            // 
+            // btnCreateTable
+            // 
+            btnCreateTable.Location = new Point(3, 74);
+            btnCreateTable.Name = "btnCreateTable";
+            btnCreateTable.Size = new Size(100, 23);
+            btnCreateTable.TabIndex = 0;
+            btnCreateTable.Text = "Create Table";
+            btnCreateTable.UseVisualStyleBackColor = true;
+            btnCreateTable.Click += btnCreateTable_Click;
             // 
             // PlaylistForm
             // 
@@ -262,6 +309,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
             ClientSize = new Size(1531, 927);
+            Controls.Add(panelDatabase);
             Controls.Add(btnDatabase);
             Controls.Add(btnSeeTop100k);
             Controls.Add(btnPrevious);
@@ -289,6 +337,7 @@
             ((System.ComponentModel.ISupportInitialize)pbPlaylistImage).EndInit();
             ((System.ComponentModel.ISupportInitialize)dtvPlaylistSongs).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvtop100k).EndInit();
+            panelDatabase.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -316,5 +365,9 @@
         private Button btnSeeTop100k;
         private DataGridView dgvtop100k;
         private Button btnDatabase;
+        private Panel panelDatabase;
+        private Button btnBringTable;
+        private Button btnCreateTable;
+        private ComboBox cbTablesInDataBase;
     }
 }
