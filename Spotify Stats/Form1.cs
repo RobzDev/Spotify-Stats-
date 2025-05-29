@@ -19,7 +19,7 @@ namespace Spotify_Stats
 
 
         public const string _clientId = "9567e54c155d41608d8473688b916e90";
-        public const string _clientSecret = "3aef81f13c6142499d40004f08e0459d"; // ¡Regenera esta clave!
+        public const string _clientSecret = "3aef81f13c6142499d40004f08e0459d"; 
         public const string _redirectUri = "http://localhost:5000/callback";
         MainMenu mainMenu = new MainMenu();
 

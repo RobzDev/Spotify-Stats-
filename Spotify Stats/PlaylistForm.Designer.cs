@@ -205,7 +205,7 @@
             // 
             rdbtnSendGmail.AutoSize = true;
             rdbtnSendGmail.ForeColor = Color.Green;
-            rdbtnSendGmail.Location = new Point(144, 292);
+            rdbtnSendGmail.Location = new Point(131, 293);
             rdbtnSendGmail.Name = "rdbtnSendGmail";
             rdbtnSendGmail.Size = new Size(85, 19);
             rdbtnSendGmail.TabIndex = 17;

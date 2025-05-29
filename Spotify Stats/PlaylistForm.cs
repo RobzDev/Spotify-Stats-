@@ -18,9 +18,9 @@ namespace Spotify_Stats
     {
         string id = "";
 
-        //create a dictionary to store each artist id and name
+     
         Dictionary<string, string> artists = new Dictionary<string, string>();
-        //create a dictionary to store the artist name and the number of times it appears in the playlist
+
         Dictionary<string, int> artistCount = new Dictionary<string, int>();
 
 
@@ -56,6 +56,7 @@ namespace Spotify_Stats
             b64.SetCircularProfilePicture(pboxUserPhoto, pboxUserPhoto.Image);
             lblUsername.Text = Properties.Settings.Default.User;
 
+            CenterLabelBelowPictureBox(lblPlaylistName, pbPlaylistImage);
 
             string normalizedPlaylistName = playlistname.ToLower().Replace(" ", "_").Replace("-", "_");
 
@@ -410,7 +411,7 @@ namespace Spotify_Stats
 
         private void PopulateplotArtistsSongsCount()
         {
-            // Tomamos los 10 artistas con más canciones
+            
             var topArtists = artistCount
                 .OrderByDescending(kv => kv.Value)
                 .Take(20)
@@ -419,46 +420,39 @@ namespace Spotify_Stats
             string[] labels = topArtists.Select(kv => kv.Key).ToArray();
             double[] values = topArtists.Select(kv => (double)kv.Value).ToArray();
 
-            // Limpiar el gráfico anterior
+            
             plotArtistsSongsCount.Plot.Clear();
 
-            // Crear barras con posiciones manuales
+         
             for (int i = 0; i < values.Length; i++)
             {
-                double pos = i + 1; // posiciones: 1, 2, 3...
+                double pos = i + 1;
                 double val = values[i];
                 var bar = plotArtistsSongsCount.Plot.Add.Bar(position: pos, value: val);
 
-                // Colores opcionales
-                //bar.FillColor = ScottPlot.Colors.Category10[i % 10];
-                //bar.BorderColor = ScottPlot.Color.Black;
-                //bar. = 1;
             }
 
-            // Crear etiquetas manuales
             ScottPlot.Tick[] ticks = labels
                 .Select((label, i) => new ScottPlot.Tick(i + 1, label))
                 .ToArray();
 
-            // Aplicar etiquetas en eje X
             plotArtistsSongsCount.Plot.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(ticks);
             plotArtistsSongsCount.Plot.Axes.Bottom.TickLabelStyle.FontSize = 14; // Tamaño más grande
             plotArtistsSongsCount.Plot.Axes.Bottom.TickLabelStyle.Rotation = 45; // Rotar para que no se encimen
 
-            // Opcional: márgenes más amplios
             plotArtistsSongsCount.Plot.Axes.Margins(bottom: 0.2, left: 0.15);
 
 
 
 
-            // Títulos
+            
             plotArtistsSongsCount.Plot.Title("Songs per Artist", size: 20);
             plotArtistsSongsCount.Plot.Axes.Left.Label.Text = "Number of Songs";
             plotArtistsSongsCount.Plot.Axes.Left.Label.FontSize = 14;
             plotArtistsSongsCount.Plot.Axes.Bottom.Label.Text = "Artists";
             plotArtistsSongsCount.Plot.Axes.Bottom.Label.FontSize = 14;
 
-            // Refrescar
+          
             plotArtistsSongsCount.Refresh();
         }
 
@@ -986,5 +980,26 @@ namespace Spotify_Stats
 
             }
         }
+
+
+
+
+
+        //create a method to center the label below the picturebox
+        private void CenterLabelBelowPictureBox(System.Windows.Forms.Label label, PictureBox pictureBox)
+        {
+            if (label != null && pictureBox != null)
+            {
+                label.Left = pictureBox.Left + (pictureBox.Width - label.Width) / 2;
+                label.Top = pictureBox.Bottom + 5; // 5 pixels below the PictureBox
+            }
+        }
+
     }
+
+
+
+
+
+
 }
